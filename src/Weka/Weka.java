@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import weka.core.Attribute;
 import weka.core.DenseInstance;
 import weka.core.Instances;
+import weka.filters.Filter;
+import weka.filters.supervised.attribute.Discretize;
 
 /*ahihi
 */
@@ -26,6 +28,7 @@ public class Weka {
     public static final char close = '}';
     public static final char sep = ',';
     public static Instances data;
+    public static Instances newData;
     
     public static void contoh_tulis ()throws Exception{
         ArrayList<Attribute>	atts;
@@ -131,10 +134,23 @@ public class Weka {
         data.setClassIndex(data.numAttributes() - 1);
     }
     
+    public static Instances filter(Instances x) throws Exception{
+        String[] options = new String[2];
+        options[0] = "-R";                                    // "range"
+        options[1] = "1";                                     // first attribute
+        Discretize dis = new Discretize();
+        dis.setOptions(options);
+        dis.setInputFormat(x);
+        return Filter.useFilter(x, dis);
+    }
+    
     public static void main(String[] args){
         try{
             baca("data/iris.arff");
             System.out.println(data);
+            System.out.println("=================");
+            newData = filter(data);
+            System.out.println(newData);
         } catch (Exception e){
             System.out.println(e);
         }
