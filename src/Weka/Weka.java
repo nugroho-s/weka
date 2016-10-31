@@ -5,7 +5,9 @@
  */
 package Weka;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.util.ArrayList;
 import weka.core.Attribute;
 import weka.core.DenseInstance;
@@ -21,6 +23,8 @@ public class Weka {
     public static final char open = '{';
     public static final char close = '}';
     public static final char sep = ',';
+    public static Instances data;
+    
     public static void contoh_tulis ()throws Exception{
         ArrayList<Attribute>	atts;
         ArrayList<Attribute>	attsRel;
@@ -116,9 +120,19 @@ public class Weka {
         // 4. output data
         System.out.println(data);
     }
+    
+    public static void baca(String file)throws Exception{
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        data = new Instances(reader);
+        reader.close();
+        // setting class attribute
+        data.setClassIndex(data.numAttributes() - 1);
+    }
+    
     public static void main(String[] args){
         try{
-            contoh_tulis();
+            baca("data/iris.arff");
+            System.out.println(data);
         } catch (Exception e){
             System.out.println(e);
         }
