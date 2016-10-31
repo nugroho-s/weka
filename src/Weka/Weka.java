@@ -5,12 +5,24 @@
  */
 package Weka;
 
+import java.io.File;
+import weka.core.Attribute;
+import weka.core.DenseInstance;
+import weka.core.Instances;
+
 /**
  *
  * @author user
  */
 public class Weka {
+    public static File f = new File("../../data/iris.arff");
+    public static final char comment = '%';
+    public static final char open = '{';
+    public static final char close = '}';
+    public static final char sep = ',';
     public static void main (String[] args){
-        System.out.println("hello world");
+        if (f.canRead()){
+            System.out.println("");
+        }
     }
 }
