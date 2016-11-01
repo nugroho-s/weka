@@ -18,6 +18,7 @@ import weka.core.Instances;
 import weka.filters.Filter;
 import weka.classifiers.bayes.NaiveBayes;
 import weka.filters.supervised.attribute.Discretize;
+import weka.classifiers.Evaluation;
 
 /*ahihi
 */
@@ -29,6 +30,7 @@ public class Weka {
     public static String lokasi_file = "data/iris.arff";
     public static Instances data;
     public static Classifier cls;
+    public static Evaluation eval;
     
     public static void baca(String file)throws Exception{
         BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -63,6 +65,12 @@ public class Weka {
         return (Classifier) weka.core.SerializationHelper.read(path);
     }
     
+    public static Evaluation full_training(Instances train, Classifier c) throws Exception{
+        Evaluation temp = new Evaluation(train);
+        temp.evaluateModel(c, data);
+        return temp;
+    }
+    
     public static void main(String[] args){
         Scanner r = new Scanner(System.in);
         try{
@@ -76,13 +84,20 @@ public class Weka {
                 data = filter(data);
                 System.out.println(data);
             }
-            System.out.print("Masukkan nama model di folder model (- jika belum ada model)");
+            System.out.print("Masukkan nama model di folder model (- jika belum ada model): ");
             String model =  r.next();
             if ("-".equals(model)){
                 //tanpa model, save masuk sini
                 classification(data);
                 cls = classification(data);
+                System.out.print("Masukkan metode training ft(full training)/cv(10 folds cross-validation): ");
+                String train_mode = r.next();
                 System.out.println(cls);
+                if(train_mode.equals("ft")){
+                    //training dengan metode full training
+                    eval = full_training(data,cls);
+                    System.out.println(eval.toSummaryString("\nResults\n======\n", false));
+                }
             } else {
                 //dengan model, load masuk sini
                 cls = load_model(model);
