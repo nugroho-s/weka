@@ -1,4 +1,6 @@
 # weka
+# tutorial implementasi ke java
+https://weka.wikispaces.com/Use+WEKA+in+your+Java+code
 # classifier
 menggunakan <i>naive-bayes</i> (weka.classifiers.bayes.NaiveBayes).
 # load dan save model
@@ -6,5 +8,5 @@ menggunakan <a href="https://weka.wikispaces.com/Serialization" target="_blank">
 model disave setelah menggunakan classifier dan pembelajaran (10 folds/full training), sesuai urutan menjalankan program gui.
 # options
 jika perlu options, menggunakan options bawaan weka yang ada di text box (biar hasil akhirnya bisa sama)
-<br/>
+<br/>&nbsp;<br/>
 <img src="http://imageshack.com/a/img923/5324/NamaRV.png"></img>
