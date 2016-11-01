@@ -10,6 +10,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.io.Serializable;
+import weka.classifiers.Classifier;
 import weka.core.Attribute;
 import weka.core.DenseInstance;
 import weka.core.Instances;
@@ -24,9 +26,10 @@ import weka.filters.supervised.attribute.Discretize;
  * @author user
  */
 public class Weka {
-    public static File f = new File("../../data/iris.arff");
+    public static String lokasi_file = "data/iris.arff";
     public static Instances data;
     public static Instances newData;
+    public static Classifier cls;
     
     public static void baca(String file)throws Exception{
         BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -48,10 +51,17 @@ public class Weka {
         return Filter.useFilter(x, dis);
     }
     
+    public static Classifier load_model(String nama) throws Exception{
+        String path = "model/";
+        path = path.concat(nama);
+        path = path.concat(".model");
+        return (Classifier) weka.core.SerializationHelper.read(path);
+    }
+    
     public static void main(String[] args){
         Scanner r = new Scanner(System.in);
         try{
-            baca("data/iris.arff");
+            baca(lokasi_file);
             System.out.println(data);
             System.out.println("=================");
             char filter;
@@ -60,6 +70,15 @@ public class Weka {
             if (Character.toLowerCase(filter)=='y'){
                 newData = filter(data);
                 System.out.println(newData);
+            }
+            System.out.print("Masukkan nama model di folder model (- jika belum ada model)");
+            String model =  r.next();
+            if ("-".equals(model)){
+                //tanpa model, save masuk sini
+            } else {
+                //dengan model, load masuk sini
+                cls = load_model(model);
+                System.out.println(cls);
             }
         } catch (Exception e){
             System.out.println(e);
