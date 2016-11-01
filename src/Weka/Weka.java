@@ -25,10 +25,6 @@ import weka.filters.supervised.attribute.Discretize;
  */
 public class Weka {
     public static File f = new File("../../data/iris.arff");
-    public static final char comment = '%';
-    public static final char open = '{';
-    public static final char close = '}';
-    public static final char sep = ',';
     public static Instances data;
     public static Instances newData;
     
