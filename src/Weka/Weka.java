@@ -100,24 +100,26 @@ public class Weka {
      public static Evaluation LipatanSilang(Instances data) throws Exception {
         
         
-        int seed = 5;          // the seed for randomizing the data
-        int folds = 10;        // the number of folds to generate, >=2
-        Instances randData;
-        Random rand = new Random(seed);   // create seeded number generator
-        randData = new Instances(data);   // create copy of original data
-        randData.randomize(rand);         // randomize data with number generator
-        if (randData.classAttribute().isNominal())
-          randData.stratify(folds);
-        Evaluation eval = new Evaluation(randData);  
-        for (int n = 0; n < folds; n++) {
-            Instances train = randData.trainCV(folds, n);
-            Instances test = randData.testCV(folds, n);
-           // Classifier clsCopy = Classifier.makeCopy(cls);
-          //  clsCopy.buildClassifier(train);
-            eval.evaluateModel(cls, test);
-
-            
-          }
+//        int seed = 5;          // the seed for randomizing the data
+//        int folds = 10;        // the number of folds to generate, >=2
+//        Instances randData;
+//        Random rand = new Random(seed);   // create seeded number generator
+//        randData = new Instances(data);   // create copy of original data
+//        randData.randomize(rand);         // randomize data with number generator
+//        if (randData.classAttribute().isNominal())
+//          randData.stratify(folds);
+//        Evaluation eval = new Evaluation(randData);  
+//        for (int n = 0; n < folds; n++) {
+//            Instances train = randData.trainCV(folds, n);
+//            Instances test = randData.testCV(folds, n);
+//           // Classifier clsCopy = Classifier.makeCopy(cls);
+//          //  clsCopy.buildClassifier(train);
+//            eval.evaluateModel(cls, test);
+//
+//            
+//          }
+        eval = new Evaluation(data);
+        eval.crossValidateModel(cls, data, 10, new Random(1));
         return eval;
     }  
     
@@ -171,8 +173,8 @@ public class Weka {
                 }
                 Instance i1 = new DenseInstance(1.0, attValues);
                 i1.setDataset(data);
-                cls.classifyInstance(i1);
-                System.out.println(i1);
+                int idx = (int) cls.classifyInstance(i1);
+                System.out.println(classVal.get(idx));
                 
             }
             
