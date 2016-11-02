@@ -19,6 +19,7 @@ import weka.filters.Filter;
 import weka.classifiers.bayes.NaiveBayes;
 import weka.filters.supervised.attribute.Discretize;
 import weka.classifiers.Evaluation;
+import weka.core.Debug.Random;
 import weka.core.Instance;
 
 /*ahihi
@@ -67,6 +68,11 @@ public class Weka {
         return (Classifier) weka.core.SerializationHelper.read(path);
     }
     
+    public static void simpan_model(String nama) throws Exception{
+       String output =  "model\\" + nama +".model";
+       weka.core.SerializationHelper.write(output, cls);
+    }
+             
     public static Evaluation full_training(Instances train, Classifier c) throws Exception{
         Evaluation temp = new Evaluation(train);
         temp.evaluateModel(c, data);
@@ -82,7 +88,38 @@ public class Weka {
             eval = full_training(data,cls);
             System.out.println(eval.toSummaryString("\nResults\n======\n", false));
         }
+        else {
+            eval = LipatanSilang(data);
+            System.out.println(eval.toSummaryString("\nResults\n======\n", false));
+            
+        }
     }
+    
+   
+    
+     public static Evaluation LipatanSilang(Instances data) throws Exception {
+        
+        
+        int seed = 5;          // the seed for randomizing the data
+        int folds = 10;        // the number of folds to generate, >=2
+        Instances randData;
+        Random rand = new Random(seed);   // create seeded number generator
+        randData = new Instances(data);   // create copy of original data
+        randData.randomize(rand);         // randomize data with number generator
+        if (randData.classAttribute().isNominal())
+          randData.stratify(folds);
+        Evaluation eval = new Evaluation(randData);  
+        for (int n = 0; n < folds; n++) {
+            Instances train = randData.trainCV(folds, n);
+            Instances test = randData.testCV(folds, n);
+           // Classifier clsCopy = Classifier.makeCopy(cls);
+          //  clsCopy.buildClassifier(train);
+            eval.evaluateModel(cls, test);
+
+            
+          }
+        return eval;
+    }  
     
     public static void main(String[] args){
         try{
@@ -138,6 +175,17 @@ public class Weka {
                 System.out.println(i1);
                 
             }
+            
+            System.out.println("Ingin menyimpan model? (Y/N): ");
+            char kakiku =  r.next().charAt(0);
+            if (Character.toLowerCase(kakiku)=='y'){
+                String NamaModel = r.next();
+                simpan_model(NamaModel);
+                System.out.println("Berhasil Menyimpan");
+            
+            }
+            
+            
         } catch (Exception e){
             System.out.println(e);
         }
